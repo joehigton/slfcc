@@ -208,11 +208,3 @@ results_summary %>% filter(grepl("15",group_diff_label), metric != "ece") %>%
 ggsave("simulations_just15.png",width = 8, height = 4)
 
 
-
-
-
-
-
-
-
-
