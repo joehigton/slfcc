@@ -686,6 +686,15 @@ for(question in question_list){
 summary(lm(value ~ educ + income + race + party +gender+ image, data = natrep %>% filter(varLabel == "Safety - Daytime Walking")))$r.squared
 
 
+model1 <- lmer(value ~ educ + income + race + party +gender+ (1 | image), data = natrep %>% filter(varLabel =="Neighborhood Wealth"))
+model2 <- lmer(value ~ educ + income + race + party +gender+ (1 | image), data = natrep %>% filter(varLabel =="Safety - Daytime Walking"))
+model3 <- lmer(value ~ educ + income + race + party +gender+ (1 | image), data = natrep %>% filter(varLabel =="Safety - Nighttime Walking"))
+
+r.squaredGLMM(model1)[1, "R2m"]
+r.squaredGLMM(model2)[1, "R2m"]
+r.squaredGLMM(model3)[1, "R2m"]
+
+
 
 pred_variables<- demographic_vars
 out<-out %>% left_join(., 

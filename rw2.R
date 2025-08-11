@@ -325,11 +325,18 @@ summary_stats <- all_results %>%
 print("Summary across seeds:")
 print(summary_stats)
 
-all_results %>% select(method,bias,rmse,coverage) %>% 
-  pivot_longer(cols = c("bias","rmse","coverage")) %>% 
-  ggplot(aes(x = method, y = value)) +
+all_results %>% select(seed,method,bias,rmse,coverage) %>% 
+  mutate(bias = abs(bias)) %>% 
+  pivot_wider(values_from = c("bias","coverage","rmse"),
+              names_from = "method") %>%
+  mutate(
+    "Bias reduction"     = bias_Reweighted - bias_Unweighted,
+    "RMSE reduction"     = rmse_Reweighted - rmse_Unweighted,
+    "Coverage reduction" = coverage_Unweighted - coverage_Reweighted
+  ) 
+  pivot_longer(cols = c("RMSE reduction","Bias reduction","Coverage reduction")) %>% 
+  ggplot(aes(x = name, y = value)) +
   geom_boxplot() +
-  facet_wrap(~ name, scales = "free_y") +
   labs(
     x = "Method",
     y = "Value",
@@ -343,10 +350,18 @@ all_results %>% select(method,bias,rmse,coverage) %>%
 
 ggsave("image_reweighting.png",width=7,height=7)
   
+all_results$r_squared_marginal
 
 
-
-
+all_results %>% select(seed,method,bias,rmse,coverage) %>% 
+  mutate(bias = abs(bias)) %>% 
+  pivot_wider(values_from = c("bias","coverage","rmse"),
+              names_from = "method") %>%
+  mutate(
+    "Bias reduction"     = bias_Reweighted - bias_Unweighted,
+    "RMSE reduction"     = rmse_Reweighted - rmse_Unweighted,
+    "Coverage reduction" = coverage_Unweighted - coverage_Reweighted
+  ) %>%select(seed, contains("reduction")) %>%  lapply(summary)
 
 
 

@@ -4,7 +4,7 @@ library(haven)
 library(janitor)
 library(rsample)
 
-set.seed(12)
+set.seed(2)
 
 # ---- User settings ----
 DATA_PATH <- "prolific_data.dta"
@@ -30,6 +30,7 @@ df_raw <- read_dta(DATA_PATH) %>%
 df <- df_raw %>%
   transmute(
     response_id = as.character(response_id),
+    var_label = var_label,
     img         = as.character(img),
     value       = as.numeric(value),
     gender      = factor(gender),
@@ -39,6 +40,18 @@ df <- df_raw %>%
     party       = factor(party)
   ) %>%
   drop_na(response_id, img, value, gender, race, income, educ, party)
+
+
+model1 <- lmer(value ~ educ + income + race + party +gender+ (1 | img), data = df %>% filter(var_label =="Neighborhood Wealth"))
+model2 <- lmer(value ~ educ + income + race + party +gender+ (1 | img), data = df %>% filter(var_label =="Safety - Daytime Walking"))
+model3 <- lmer(value ~ educ + income + race + party +gender+ (1 | img), data = df %>% filter(var_label =="Safety - Nighttime Walking"))
+
+r.squaredGLMM(model1)[1, "R2m"]
+r.squaredGLMM(model2)[1, "R2m"]
+r.squaredGLMM(model3)[1, "R2m"]
+
+
+
 
 # sanity: assume each annotator's Z is constant
 annotator_demo <- df %>%

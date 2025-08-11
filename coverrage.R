@@ -2,7 +2,7 @@
 
 library(tidyverse)
 library(ks)
-
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 set.seed(1234)
 
 ## ---
@@ -218,6 +218,8 @@ plot_coverage <- ggplot(summary_stats, aes(x = r_squared, y = coverage, colour =
 
 print(plot_coverage)
 
+ggsave("sim_bz_cov.png",width=6,height=6)
+
 # Prepare long form for bias & RMSE
 error_long <- summary_stats %>%
   select(method, k_strength, r_squared, mean_bias, rmse) %>%
@@ -239,3 +241,4 @@ plot_error <- ggplot(error_long, aes(x = r_squared, y = value, colour = method, 
   theme_minimal()
 
 print(plot_error)
+ggsave("sim_bz_error_bias.png",width=6,height=6)
