@@ -9,10 +9,10 @@ set.seed(1234)
 ## Step 0: Set Simulation Parameters
 ## ---
 
-N_POPULATION <- 2000    # Size of the entire target population
+N_POPULATION <- 10000    # Size of the entire target population
 N_ANNOTATOR  <- 500     # Size of the annotator sample we draw each time
-N_TRIALS     <- 200     # Number of trials to run for each R-squared x k level
-N_BOOT       <- 200     # Bootstrap reps for CIs
+N_TRIALS     <- 500     # Number of trials to run for each R-squared x k level
+N_BOOT       <- 500     # Bootstrap reps for CIs
 
 R_SQUARED_LEVELS <- seq(0.1, 0.95, by = 0.05)  # Levels of b(Z) quality to test
 K_LEVELS         <- c(0, 0.5, 1, 2)            # Overlap stress: sampling ∝ exp(k * Z1)
